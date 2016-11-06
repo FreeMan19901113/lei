@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+body {
+	background: url("img/gray_jean.png") repeat scroll 0 0 #efefef;
+	color: #000;
+	font: 0.9em/150% "Arimo", arial, verdana, sans-serif;
+	margin: 50;
+	padding: 0;
+	text-shadow: 0 0 1px transparent;
+}

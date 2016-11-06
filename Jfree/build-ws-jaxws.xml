@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="create-user-jaxws">
+	<property name="jaxws_user_path" value="src/com/jfree/framework/webservice/user/jaxws" />
+	<property name="jaxws_command"
+		value="-cp ./target/classes -keep -s ./src -d ./target/classes" />
+	<target name="clear-user-jaxws">
+		<echo message="初始化" />
+		<mkdir dir="${jaxws_user_path}" />
+		<delete>
+			<fileset dir="${jaxws_user_path}" includes="**/*.java">
+			</fileset>
+		</delete>
+	</target>
+	<target name="create-user-jaxws" depends="clear-user-jaxws">
+		<echo message="生成UserServiceWS参数类、响应类" />
+		<exec executable="wsgen">
+			<arg
+				line="${jaxws_command} com.jfree.framework.webservice.user.UserWSImpl" />
+		</exec>
+	</target>
+</project>

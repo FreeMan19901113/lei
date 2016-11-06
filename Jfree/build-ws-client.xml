@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build">
+	<!-- Ant生产路径 -->
+	<property name="out_path" value="D:/WS-JAR-Build" />
+	<!-- 客户端包结构 -->
+	<property name="out_package" value="com.jfree.framework.webservice.user.client" />
+	<!-- 客户端java类包结构 out_package与src_source_path需保持一致 -->
+	<property name="src_source_path" value="com/jfree/framework/webservice/user/client" />
+	<!-- 客户端jar包名 -->
+	<property name="out_jar_name" value="jfreeWSclient.jar" />
+	<!-- webservice地址 -->
+	<property name="src_source_url" value="http://localhost:8888/webservice/user?wsdl" />
+	<!-- 客户端源码测试项目路径 -->
+	<property name="target_path" value="D:/eclipse/workspace/Jfree" />
+	<tstamp prefix="date">
+		<format property="now" pattern="yyyy-MM-dd hh:mm:ss" />
+	</tstamp>
+	<target name="build-init">
+		<echo message="当前时间:${date.now}" />
+		<echo message="初始化" />
+		<delete dir="${out_path}" />
+		<mkdir dir="${out_path}" />
+	</target>
+	<target name="build-class" depends="build-init">
+		<echo message="生成Client Service代码" />
+		<exec executable="wsimport">
+			<!-- -verbose 输出过程 -->
+			<arg line=" -keep -d ${out_path} -p ${out_package} ${src_source_url}" />
+		</exec>
+	</target>
+	<target name="build-jar" depends="build-class">
+		<echo message="Client Service Jar包制作" />
+		<jar jarfile="${out_path}/${out_jar_name}">
+			<fileset dir="${out_path}" includes="${src_source_path}/*.class">
+			</fileset>
+		</jar>
+	</target>
+	<target name="clear-class">
+		<echo message="清理Client Service .class文件" />
+		<delete>
+			<fileset dir="${out_path}" includes="**/*.class" />
+		</delete>
+	</target>
+	<target name="copyto-target">
+		<echo message="复制Client Service .java文件到${target_path}" />
+		<delete>
+			<fileset dir="${target_path}/src/${src_source_path}"
+				includes="**/*java" />
+		</delete>
+		<copy todir="${target_path}/src">
+			<fileset file="${out_path}/com" includes="**/*.java">
+			</fileset>
+		</copy>
+	</target>
+	<target name="build" depends="build-jar,clear-class,copyto-target">
+	</target>
+</project>
